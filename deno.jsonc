@@ -1,9 +1,27 @@
 {
-  "tasks": {
-    "dev": "deno run --watch -A src/main.ts"
-  },
-  "imports": {
-    "@oak/oak": "jsr:@oak/oak@^17.1.0",
-    "@std/cli": "jsr:@std/cli@^1.0.6"
-  }
+	"tasks": {
+		"dev": "deno run --watch -A src/main.ts",
+		"prisma:push": "deno run -A --allow-scripts npm:prisma db push --skip-generate",
+		"prisma:generate": "deno run -A --allow-scripts npm:prisma generate",
+		"prisma:patch": "deno run -A scripts/patch_prisma.ts",
+		"prisma": "deno task prisma:push && deno task prisma:generate && deno task prisma:patch",
+		"prisma:migrate": "deno run -A --allow-scripts npm:prisma migrate dev --skip-generate"
+	},
+	"imports": {
+		"@gz/jwt": "jsr:@gz/jwt@^0.1.0",
+		"@oak/oak": "jsr:@oak/oak@^17.1.0",
+		"@prisma/client": "npm:@prisma/client@^5.21.1",
+		"@std/cli": "jsr:@std/cli@^1.0.6",
+		"@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+		"@std/encoding": "jsr:@std/encoding@^1.0.5",
+		"@std/path": "jsr:@std/path@^1.0.6",
+		"@ts-rex/bcrypt": "jsr:@ts-rex/bcrypt@^1.0.3",
+		"@types/node": "npm:@types/node@^22.7.6"
+	},
+	"fmt": {
+		"singleQuote": true,
+		"useTabs": true,
+		"indentWidth": 2
+	},
+	"nodeModulesDir": "auto"
 }
