@@ -8,7 +8,7 @@ generator client {
   provider = "prisma-client-js"
   previewFeatures = ["deno"]
   output = "../generated/prisma"
-  binaryTargets = "native"
+  binaryTargets = ["native", "darwin-arm64"]
 }
 
 datasource db {
