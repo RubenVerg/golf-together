@@ -25,5 +25,5 @@
 		"useTabs": true,
 		"indentWidth": 2
 	},
-	"nodeModulesDir": true
+	"nodeModulesDir": "auto"
 }
