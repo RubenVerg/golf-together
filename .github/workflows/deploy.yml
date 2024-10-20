@@ -24,7 +24,7 @@ jobs:
           deno-version: v2.x
 
       - name: Install step
-        run: "deno add -A --allow-scripts npm:@prisma/client"
+        run: "deno add --allow-scripts npm:@prisma/client"
 
       - name: Build step
         run: "deno task deploy"
