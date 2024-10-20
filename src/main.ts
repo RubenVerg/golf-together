@@ -4,7 +4,7 @@ import defaultRouter from './routers/default.ts';
 
 const args = parseArgs(Deno.args);
 
-const port = 'port' in args ? Number.parseInt(args.port) : 13337;
+const port = 'port' in args ? Number.parseInt(args.port) : 'dev' in args ? 13337 : 80;
 
 const app = new Application();
 

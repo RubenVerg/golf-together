@@ -1,11 +1,13 @@
 {
 	"tasks": {
-		"dev": "deno run --watch -A src/main.ts",
-		"prisma:push": "deno run -A --allow-scripts npm:prisma db push --skip-generate",
+		"dev": "deno run --watch -A src/main.ts --dev",
+		"serve": "deno run -A src/main.ts",
 		"prisma:generate": "deno run -A --allow-scripts npm:prisma generate",
 		"prisma:patch": "deno run -A scripts/patch_prisma.ts",
-		"prisma": "deno task prisma:push && deno task prisma:generate && deno task prisma:patch",
-		"prisma:migrate": "deno run -A --allow-scripts npm:prisma migrate dev --skip-generate"
+		"prisma": "deno task prisma:generate && deno task prisma:patch",
+		"prisma:migrate:dev": "deno run -A --allow-scripts npm:prisma migrate dev --skip-generate",
+		"prisma:migrate:deploy": "deno run -A --allow-scripts npm:prisma migrate deploy",
+		"deploy": "deno task prisma:migrate:deploy && deno task prisma:generate && deno task prisma:patch"
 	},
 	"imports": {
 		"@gz/jwt": "jsr:@gz/jwt@^0.1.0",

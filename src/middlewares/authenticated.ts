@@ -12,7 +12,7 @@ export default (async function authenticated({ request, response, state }, next)
 		return;
 	}
 	const [t, jwt] = authorization.split(' ');
-	if (t !== 'Basic') {
+	if (t !== 'Bearer') {
 		response.status = 400;
 		response.body = { message: 'Invalid Authorization header!' };
 	}
