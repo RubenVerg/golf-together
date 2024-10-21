@@ -2,6 +2,7 @@
   "version": "4",
   "specifiers": {
     "jsr:@gz/jwt@0.1": "0.1.0",
+    "jsr:@juji/simple-cookie@^2.0.8": "2.0.8",
     "jsr:@oak/commons@1": "1.0.0",
     "jsr:@oak/oak@^17.1.0": "17.1.0",
     "jsr:@std/assert@1": "1.0.6",
@@ -27,6 +28,9 @@
   "jsr": {
     "@gz/jwt@0.1.0": {
       "integrity": "32b0235cebcb85d363459b20ccaab0d8424fab89883c9f65caa1e2ad37e78e8f"
+    },
+    "@juji/simple-cookie@2.0.8": {
+      "integrity": "099fa8069b112e10284bee1887a3937151e843831304f504a49f94164d756d9d"
     },
     "@oak/commons@1.0.0": {
       "integrity": "49805b55603c3627a9d6235c0655aa2b6222d3036b3a13ff0380c16368f607ac",
@@ -158,6 +162,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@gz/jwt@0.1",
+      "jsr:@juji/simple-cookie@^2.0.8",
       "jsr:@oak/oak@^17.1.0",
       "jsr:@std/cli@^1.0.6",
       "jsr:@std/dotenv@~0.225.2",
