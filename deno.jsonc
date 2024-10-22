@@ -19,7 +19,8 @@
 		"@std/encoding": "jsr:@std/encoding@^1.0.5",
 		"@std/path": "jsr:@std/path@^1.0.6",
 		"@ts-rex/bcrypt": "jsr:@ts-rex/bcrypt@^1.0.3",
-		"@types/node": "npm:@types/node@^22.7.6"
+		"@types/node": "npm:@types/node@^22.7.6",
+		"htm": "https://deno.land/x/htm@0.2.3/mod.ts"
 	},
 	"fmt": {
 		"singleQuote": true,

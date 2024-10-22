@@ -159,6 +159,23 @@
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
     }
   },
+  "remote": {
+    "https://deno.land/x/htm@0.2.3/html.tsx": "774d0010a04dacf56a0b79bcbb9752eb53cf9aa26d73939468ca2e32cab704ec",
+    "https://deno.land/x/htm@0.2.3/jsx.ts": "a29e02857ab5a7e2b91fc9883c196388d2f7715afd1b047c9b0eaffe5a99493a",
+    "https://deno.land/x/htm@0.2.3/mod.ts": "d930056a7c8c645bea5f9c116d65bc309d12cfebafa8db98f7c406e1984caaec",
+    "https://deno.land/x/jsx@v0.1.5/mod.ts": "24bb89837fda59c53c12a3c0e464378ca6de9b261dec1df57ba640b1cfed9611",
+    "https://deno.land/x/jsx_html@1.2.2/constants.ts": "04886a6d73b7210c96a3f4c37fc65ac3d11a6bb76eed0660879c8f228b8ddcfa",
+    "https://deno.land/x/jsx_html@1.2.2/jsx.ts": "39b71789e38394631cba27d98223a2f9cf98026ff2964961956d676d0d1c0e9a",
+    "https://deno.land/x/jsx_html@1.2.2/mod.ts": "e9a28e0f99472eea760d02958b29de48ddd03ecc92843db89c4a28f1c40de4a0",
+    "https://deno.land/x/jsx_html@1.2.2/node/ComponentNode.ts": "8b8550e85eaa8db803bcb39d66c2c64d1c3896678c828e62c13083732a212c67",
+    "https://deno.land/x/jsx_html@1.2.2/node/ElementNode.ts": "8a30946254d5ecfccdbe4d9e5ae4a435254812c9ce0cd768d9b7c18d6e0810e3",
+    "https://deno.land/x/jsx_html@1.2.2/node/FragmentNode.ts": "0bf398d9883667b568d33bc54a0792743aee3ca221d9413daebd37885809bc19",
+    "https://deno.land/x/jsx_html@1.2.2/node/Node.ts": "f490fefe826d9c263a70cc952d5f866945bb5f14947992580382783569e0963d",
+    "https://deno.land/x/jsx_html@1.2.2/node/TextNode.ts": "39c10a8b4f0acee738cfb49d2f2b32a615ee426ed4d8193728b7b38a720f4b75",
+    "https://deno.land/x/jsx_html@1.2.2/node/utils/htmlEncode.ts": "d9262be505d8c933625916b4d24179cdbd1b67f818cb4feda4fb56ca9f372437",
+    "https://deno.land/x/jsx_html@1.2.2/node/utils/normalizeChildren.ts": "01b9e514a4870d9253ac81ffab2d3e76e76abadae97a39d0e383a8c85e42939b",
+    "https://deno.land/x/jsx_html@1.2.2/types.ts": "405df4581df27f292577f788a5304650fa26ffe3428f582ff6e94d6932164a3f"
+  },
   "workspace": {
     "dependencies": [
       "jsr:@gz/jwt@0.1",
