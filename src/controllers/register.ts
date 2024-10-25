@@ -1,12 +1,12 @@
 import { Middleware } from '@oak/oak';
-import { verify } from '@ts-rex/bcrypt';
+import { hash } from '@ts-rex/bcrypt';
 
 import { AppState } from '../types.d.ts';
 import { generateToken } from '../lib/authentication.ts';
 import { stringify as stringifyCookie } from '../lib/cookie.ts';
 import client from '../lib/prisma.ts';
 
-export default (async function login({ request, response }) {
+export default (async function register({ request, response }) {
 	const form = await request.body.form();
 	const username = form.get('username');
 	const password = form.get('password');
@@ -15,12 +15,18 @@ export default (async function login({ request, response }) {
 		response.body = { message: 'Missing username or password' };
 		return;
 	}
-	const user = await client.user.findFirst({ where: { username } });
-	if (user === null || !verify(password, user.password)) {
-		response.status = 401;
-		response.body = { message: 'Invalid username or password' };
+	const previousUser = await client.user.findFirst({ where: { username } });
+	if (previousUser !== null) {
+		response.status = 409;
+		response.body = { message: 'Username already exists' };
 		return;
 	}
+	const user = await client.user.create({
+		data: {
+			username,
+			password: hash(password),
+		},
+	});
 	const token = await generateToken(user);
 	response.redirect('/');
 	response.headers.append('Set-Cookie', stringifyCookie({

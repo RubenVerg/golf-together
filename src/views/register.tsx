@@ -15,9 +15,9 @@ export async function body(state: AppState) {
 				<input type='text' name='username' />
 				<label for='password'>Password</label>
 				<input type='password' name='password' />
-				<button type='submit'>Log in</button>
+				<button type='submit'>Register</button>
 			</form>
-			or <a href='/register'>register</a>
+			or <a href='/login'>log in</a>
 		</main>
 	</>;
 }

@@ -2,7 +2,7 @@ import { Middleware } from '@oak/oak';
 import { verify } from '@ts-rex/bcrypt';
 
 import client from '../../lib/prisma.ts';
-import {AppState } from '../../types.d.ts';
+import { AppState } from '../../types.d.ts';
 import { stringify as stringifyCookie } from '../../lib/cookie.ts';
 import { generateToken } from '../../lib/authentication.ts';
 

@@ -5,6 +5,8 @@ import { HtmlPage, renderHtml } from '../lib/render_html.ts';
 import { AppState } from '../types.d.ts';
 import loadAccount from '../middlewares/load_account.ts';
 import login from '../controllers/login.ts';
+import register from '../controllers/register.ts';
+import logout from '../controllers/logout.ts';
 
 const router = new Router();
 
@@ -19,7 +21,10 @@ const makeRenderMiddleware = (page: HtmlPage) => (async ctx => {
 router.get('/', makeRenderMiddleware(await import('../views/index.tsx')));
 router
 	.get('/login', makeRenderMiddleware(await import('../views/login.tsx')))
-	.post('/login', login);
+	.post('/login', login)
+	.get('/register', makeRenderMiddleware(await import('../views/register.tsx')))
+	.post('/register', register)
+	.post('/logout', logout);
 
 router.get('/(.*)', ({ response }) => {
 	response.status = 404;
