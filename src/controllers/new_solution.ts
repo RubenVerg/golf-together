@@ -22,9 +22,15 @@ export default (async function newSolution({ state, request, response, params })
 		response.status = 400;
 		response.body = { message: 'Invalid size' };
 	}
+	const language = form.get('language')!;
+	if (language.trim() === '') {
+		response.status = 400;
+		response.body = { message: 'Invalid language' };
+		return;
+	}
 	const solution = await client.solution.create({
 		data: {
-			language: form.get('language')!,
+			language,
 			bits,
 			approachId: approach.id,
 		}

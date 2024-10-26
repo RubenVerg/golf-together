@@ -11,9 +11,15 @@ export default (async function newApproach({ state, request, response, params })
 		response.body = { message: 'Hole not found' };
 		return;
 	}
+	const name = form.get('name')!;
+	if (name.trim() === '') {
+		response.status = 400;
+		response.body = { message: 'Invalid name' };
+		return;
+	}
 	const approach = await client.approach.create({
 		data: {
-			name: form.get('name')!,
+			name,
 			description: form.get('description')!,
 			holeId: hole.id,
 			initiatorId: state.user!,
