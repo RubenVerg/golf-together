@@ -12,9 +12,9 @@ export async function body(state: AppState) {
 			Login
 			<form method='post'>
 				<label for='username'>Username</label>
-				<input type='text' name='username' />
+				<input type='text' name='username' required />
 				<label for='password'>Password</label>
-				<input type='password' name='password' />
+				<input type='password' name='password' required />
 				<button type='submit'>Register</button>
 			</form>
 			or <a href='/login'>log in</a>

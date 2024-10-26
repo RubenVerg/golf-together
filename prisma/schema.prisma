@@ -22,6 +22,8 @@ model User {
   username        String @unique
   password        String
   holes           Hole[]
+  approaches      Approach[]
+  improvements    Improvement[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -33,6 +35,43 @@ model Hole {
   name            String
   description     String
   edits           Int @default(0)
+  approaches      Approach[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Approach {
+  id              Int @id @default(autoincrement())
+  hole            Hole @relation(fields: [holeId], references: [id])
+  holeId          Int
+  name            String
+  description     String?
+  solutions       Solution[]
+  initiator       User @relation(fields: [initiatorId], references: [id])
+  initiatorId     Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Solution {
+  id              Int @id @default(autoincrement())
+  approach        Approach @relation(fields: [approachId], references: [id])
+  approachId      Int
+  language        String
+  bits            Int
+  improvements    Improvement[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Improvement {
+  id              Int @id @default(autoincrement())
+  improvementBits Int
+  newCode         String
+  solution        Solution @relation(fields: [solutionId], references: [id])
+  solutionId      Int
+  user            User @relation(fields: [userId], references: [id])
+  userId          Int
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
