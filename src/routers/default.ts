@@ -14,11 +14,12 @@ router.use('/api', apiRouter.routes(), apiRouter.allowedMethods());
 
 router.use(loadAccount);
 
-const makeRenderMiddleware = (page: HtmlPage) => (async ctx => {
-	ctx.response.with(await renderHtml(ctx.state, page));
+const makeRenderMiddleware = <Args extends unknown[]>(page: HtmlPage<Args>, ...args: Args) => (async ctx => {
+	ctx.response.with(await renderHtml(ctx.state, page, ...args));
 }) as Middleware<AppState>;
 
 router.get('/', makeRenderMiddleware(await import('../views/index.tsx')));
+router.get('/hole/:id', async ({ state, params, response }) => response.with(await renderHtml(state, await import('../views/hole.tsx'), Number.parseInt(params.id))));
 router
 	.get('/login', makeRenderMiddleware(await import('../views/login.tsx')))
 	.post('/login', login)

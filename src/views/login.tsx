@@ -22,4 +22,4 @@ export async function body(state: AppState) {
 	</>;
 }
 
-export const title = 'Login - Golf Together';
+export function title() { return Promise.resolve('Login - Golf Together'); }
