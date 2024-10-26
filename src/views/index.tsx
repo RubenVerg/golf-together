@@ -17,7 +17,7 @@ export async function body(state: AppState) {
 				<a href='/hole/new'>Create a new hole</a>
 				<ul>
 					{(await client.hole.findMany({ include: { author: true } })).map(hole => <li>
-						<strong><a href={`/hole/${hole.id}`}>{hole.name}</a></strong> by {hole.author.username} / <time datetime={hole.updatedAt.toISOString()}>{new Intl.DateTimeFormat('en-GB').format(hole.updatedAt)}</time>
+						<strong class='user-content' style='display: inline-block;'><a href={`/hole/${hole.id}`}>{hole.name}</a></strong> by {hole.author.username} / <time datetime={hole.updatedAt.toISOString()}>{new Intl.DateTimeFormat('en-GB').format(hole.updatedAt)}</time>
 					</li>)}
 				</ul>
 			</div>

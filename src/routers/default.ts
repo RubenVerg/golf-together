@@ -1,4 +1,5 @@
-import { Router, Middleware } from '@oak/oak';
+import { Router, Middleware, send } from '@oak/oak';
+import * as path from '@std/path';
 
 import apiRouter from './api.ts';
 import { HtmlPage, renderHtml } from '../lib/render_html.ts';
@@ -37,6 +38,15 @@ router
 	.get('/register', makeRenderMiddleware(await import('../views/register.tsx')))
 	.post('/register', register)
 	.post('/logout', logout);
+
+router.use('/static', async ctx => {
+	if (ctx.request.method !== 'GET') {
+		ctx.response.status = 405;
+		ctx.response.body = 'Method not allowed';
+		return;
+	}
+	await send(ctx, ctx.request.url.pathname);
+});
 
 router.get('/(.*)', ({ request, response }) => {
 	console.log('404', request.method, request.url.toString());

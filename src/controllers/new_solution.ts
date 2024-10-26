@@ -17,10 +17,15 @@ export default (async function newSolution({ state, request, response, params })
 		response.body = { message: 'Approach not found' };
 		return;
 	}
+	const bits = Number.parseInt(form.get('size')!) * (form.get('unit') === 'bits' ? 1 : 8);
+	if (bits < 0) {
+		response.status = 400;
+		response.body = { message: 'Invalid size' };
+	}
 	const solution = await client.solution.create({
 		data: {
 			language: form.get('language')!,
-			bits: Number.parseInt(form.get('size')!) * (form.get('unit') === 'bits' ? 1 : 8),
+			bits,
 			approachId: approach.id,
 		}
 	});

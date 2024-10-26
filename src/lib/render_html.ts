@@ -11,5 +11,9 @@ export async function renderHtml<Args extends unknown[]>(state: AppState, page: 
 	return render({
 		title: await page.title(state, ...args),
 		body: await page.body(state, ...args),
+		lang: 'en',
+		styles: [
+			{ href: '/static/style.css' },
+		],
 	});
 }

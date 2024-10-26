@@ -21,6 +21,16 @@ export default (async function register({ request, response }) {
 		response.body = { message: 'Username already exists' };
 		return;
 	}
+	if ([...username].some(c => !c.match(/[a-zA-Z0-9_]/))) {
+		response.status = 400;
+		response.body = { message: 'Invalid username' };
+		return;
+	}
+	if (username.length < 6 || username.length > 32) {
+		response.status = 400;
+		response.body = { message: 'Invalid username length' };
+		return;
+	}
 	const user = await client.user.create({
 		data: {
 			username,

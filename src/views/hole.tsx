@@ -14,8 +14,8 @@ export async function body(state: AppState, id: number) {
 	return <>
 		{await TopBar({ state })}
 		<main>
-			<h1>{hole.name} <span style='font-size: 1rem;'>by {hole.author.username}</span></h1>
-			<p>{hole.description}</p>
+			<h1 class='user-content'>{hole.name} <span style='font-size: 1rem;'>by {hole.author.username}</span></h1>
+			<p class='user-content'>{hole.description}</p>
 			<details>
 				<summary>New approach</summary>
 				<form method='POST' action={`/hole/${hole.id}/approach/new`}>
@@ -27,8 +27,8 @@ export async function body(state: AppState, id: number) {
 				</form>
 			</details>
 			{hole.approaches.map(approach => <>
-				<h2 id={`approach-${approach.id}`}>{approach.name}</h2>
-				<p>{approach.description}</p>
+				<h2 id={`approach-${approach.id}`} class='user-content'>{approach.name}</h2>
+				<p class='user-content'>{approach.description}</p>
 				<details>
 					<summary>New solution</summary>
 					<form method='POST' action={`/hole/${hole.id}/approach/${approach.id}/new`}>
@@ -46,7 +46,7 @@ export async function body(state: AppState, id: number) {
 					</form>
 				</details>
 				{approach.solutions.toSorted((a, b) => a.bits - b.bits).map(solution => <>
-					<h3 id={`solution-${solution.id}`}>{solution.language}, {solution.bits / 8} bytes {solution.bits % 8 !== 0 && `(${solution.bits} bits)`}</h3>
+					<h3 id={`solution-${solution.id}`} class='user-content'>{solution.language}, {solution.bits / 8} bytes {solution.bits % 8 !== 0 && `(${solution.bits} bits)`}</h3>
 					<pre><code>{solution.improvements.at(-1)!.newCode}</code></pre>
 					<details>
 						<summary>Improve this solution!</summary>
