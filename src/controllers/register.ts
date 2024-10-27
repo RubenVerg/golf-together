@@ -15,8 +15,7 @@ export default (async function register({ request, response }) {
 		response.body = { message: 'Missing username or password' };
 		return;
 	}
-	const previousUser = await client.user.findFirst({ where: { username: { mode: 'insensitive', equals: username } } });
-	if (previousUser !== null) {
+	if (await client.user.count({ where: { username: { mode: 'insensitive', equals: username } } })) {
 		response.status = 409;
 		response.body = { message: 'Username already exists' };
 		return;
