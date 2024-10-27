@@ -30,7 +30,7 @@ model User {
 
 model Hole {
   id              Int @id @default(autoincrement())
-  author          User @relation(fields: [authorId], references: [id])
+  author          User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId        Int
   name            String
   description     String
@@ -42,12 +42,12 @@ model Hole {
 
 model Approach {
   id              Int @id @default(autoincrement())
-  hole            Hole @relation(fields: [holeId], references: [id])
+  hole            Hole @relation(fields: [holeId], references: [id], onDelete: Cascade)
   holeId          Int
   name            String
   description     String?
   solutions       Solution[]
-  initiator       User @relation(fields: [initiatorId], references: [id])
+  initiator       User @relation(fields: [initiatorId], references: [id], onDelete: Cascade)
   initiatorId     Int
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -55,7 +55,7 @@ model Approach {
 
 model Solution {
   id              Int @id @default(autoincrement())
-  approach        Approach @relation(fields: [approachId], references: [id])
+  approach        Approach @relation(fields: [approachId], references: [id], onDelete: Cascade)
   approachId      Int
   language        String
   bits            Int
@@ -68,9 +68,9 @@ model Improvement {
   id              Int @id @default(autoincrement())
   improvementBits Int
   newCode         String
-  solution        Solution @relation(fields: [solutionId], references: [id])
+  solution        Solution @relation(fields: [solutionId], references: [id], onDelete: Cascade)
   solutionId      Int
-  user            User @relation(fields: [userId], references: [id])
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          Int
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

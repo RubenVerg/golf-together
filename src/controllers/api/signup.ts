@@ -17,7 +17,7 @@ export default (async function signup({ request, response }) {
 		return;
 	}
 	const hashedPassword = hash(password);
-	if (await client.user.count({ where: { username } }) !== 0) {
+	if (await client.user.count({ where: { username: { mode: 'insensitive', equals: username } } })) {
 		response.status = 409;
 		response.body = { message: 'Username already exists' };
 		return;
