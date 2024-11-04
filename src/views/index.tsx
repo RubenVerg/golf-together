@@ -5,12 +5,36 @@ import { h, Fragment } from 'htm';
 import { AppState } from '../types.d.ts';
 import TopBar from '../components/top_bar.tsx';
 import client from '../lib/prisma.ts';
+import { leaderboard } from '../lib/points.ts';
 
 export async function body(state: AppState) {
 	return <>
 		{await TopBar({ state })}
 		<main>
 			<h1>Welcome to Golf Together!</h1>
+
+			<div>
+				<h2>Leaderboard</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>User</th>
+							<th>Points</th>
+						</tr>
+					</thead>
+					<tbody>
+						{await Promise.all((await leaderboard()).map(async ([id, points]) => {
+							if (points === 0) return;
+							const user = await client.user.findFirst({ where: { id } });
+							if (!user) return;
+							return <tr>
+								<th>{user.username}</th>
+								<td>{points}</td>
+							</tr>;
+						}))}
+					</tbody>
+				</table>
+			</div>
 
 			<div>
 				<h2>Holes</h2>
