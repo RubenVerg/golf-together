@@ -26,7 +26,7 @@ export async function body(state: AppState, id: number) {
 					<button type='submit'>Create</button>
 				</form>
 			</details>
-			{hole.approaches.map(approach => <>
+			{await Promise.all(hole.approaches.map(async approach => <>
 				<h2 id={`approach-${approach.id}`} class='user-content'>{approach.name}</h2>
 				<p class='user-content'>{approach.description}</p>
 				<details>
@@ -45,28 +45,31 @@ export async function body(state: AppState, id: number) {
 						<button type='submit'>Create</button>
 					</form>
 				</details>
-				{approach.solutions.toSorted((a, b) => a.bits - b.bits).map(solution => <>
-					<h3 id={`solution-${solution.id}`} class='user-content'>{solution.language}, {solution.bits / 8} bytes {solution.bits % 8 !== 0 && `(${solution.bits} bits)`}</h3>
-					<pre><code>{solution.improvements.at(-1)!.newCode}</code></pre>
-					<details>
-						<summary>Improve this solution!</summary>
-						<form method='POST' action={`/hole/${hole.id}/solution/${solution.id}/improve`}>
-							<select name='subtract'>
-								<option value='subtract' selected>Improve by</option>
-								<option value='set'>Improve to</option>
-							</select>
-							<input type='number' name='size' required />
-							<select name='unit'>
-								<option value='bytes' selected={solution.bits % 8 === 0}>bytes</option>
-								<option value='bits' selected={solution.bits % 8 !== 0}>bits</option>
-							</select>
-							<label for='code'>Code</label>
-							<textarea name='code' required></textarea>
-							<button type='submit'>Improve</button>
-						</form>
-					</details>
-				</>)}
-			</>)}
+				{await Promise.all(approach.solutions.toSorted((a, b) => a.bits - b.bits).map(async solution => {
+					const language = await client.language.findFirst({ where: { name: solution.language } });
+					return <>
+						<h3 id={`solution-${solution.id}`} class='user-content'>{language && language.link ? <a href={language.link}>{language.name}</a> : solution.language}, {solution.bits / 8} bytes {solution.bits % 8 !== 0 && `(${solution.bits} bits)`}{language && language.encodingLink ? <a href={language.encodingLink}>*</a> : undefined}</h3>
+						<pre><code>{solution.improvements.at(-1)!.newCode}</code></pre>
+						<details>
+							<summary>Improve this solution!</summary>
+							<form method='POST' action={`/hole/${hole.id}/solution/${solution.id}/improve`}>
+								<select name='subtract'>
+									<option value='subtract' selected>Improve by</option>
+									<option value='set'>Improve to</option>
+								</select>
+								<input type='number' name='size' required />
+								<select name='unit'>
+									<option value='bytes' selected={solution.bits % 8 === 0}>bytes</option>
+									<option value='bits' selected={solution.bits % 8 !== 0}>bits</option>
+								</select>
+								<label for='code'>Code</label>
+								<textarea name='code' required></textarea>
+								<button type='submit'>Improve</button>
+							</form>
+						</details>
+					</>;
+				}))}
+			</>))}
 		</main>
 	</>;
 }
