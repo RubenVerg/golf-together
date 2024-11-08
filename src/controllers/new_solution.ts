@@ -22,15 +22,21 @@ export default (async function newSolution({ state, request, response, params })
 		response.status = 400;
 		response.body = { message: 'Invalid size' };
 	}
-	const language = form.get('language')!;
-	if (language.trim() === '') {
+	const languageName = form.get('language')!;
+	if (languageName.trim() === '') {
 		response.status = 400;
 		response.body = { message: 'Invalid language' };
 		return;
 	}
+	const language = await client.language.findFirst({ where: { name: languageName } });
+	if (language === null) {
+		response.status = 400;
+		response.body = { message: 'Unknown language' };
+		return;
+	}
 	const solution = await client.solution.create({
 		data: {
-			language,
+			languageId: language.id,
 			bits,
 			approachId: approach.id,
 		}

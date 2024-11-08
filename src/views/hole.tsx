@@ -7,10 +7,11 @@ import TopBar from '../components/top_bar.tsx';
 import client from '../lib/prisma.ts';
 
 export async function body(state: AppState, id: number) {
-	const hole = await client.hole.findFirst({ where: { id }, include: { author: true, approaches: { include: { solutions: { include: { improvements: true } } } } } });
+	const hole = await client.hole.findFirst({ where: { id }, include: { author: true, approaches: { include: { solutions: { include: { improvements: true, language: true } } } } } });
 	if (hole === null) {
 		throw new Error('Hole not found');
 	}
+	const languages = await client.language.findMany();
 	return <>
 		{await TopBar({ state })}
 		<main>
@@ -26,14 +27,17 @@ export async function body(state: AppState, id: number) {
 					<button type='submit'>Create</button>
 				</form>
 			</details>
-			{await Promise.all(hole.approaches.map(async approach => <>
+			{hole.approaches.map(approach => <>
 				<h2 id={`approach-${approach.id}`} class='user-content'>{approach.name}</h2>
 				<p class='user-content'>{approach.description}</p>
 				<details>
 					<summary>New solution</summary>
 					<form method='POST' action={`/hole/${hole.id}/approach/${approach.id}/new`}>
 						<label for='language'>Language</label>
-						<input type='text' name='language' required />
+						<input type='text' name='language' list='languages' required />
+						<datalist id='languages'>
+							{languages.map(lang => <option value={lang.name}>{lang.name}</option>)}
+						</datalist>
 						<label for='size'>Size</label>
 						<input type='number' name='size' required></input>
 						<select name='unit'>
@@ -45,10 +49,13 @@ export async function body(state: AppState, id: number) {
 						<button type='submit'>Create</button>
 					</form>
 				</details>
-				{await Promise.all(approach.solutions.toSorted((a, b) => a.bits - b.bits).map(async solution => {
-					const language = await client.language.findFirst({ where: { name: solution.language } });
+				{approach.solutions.toSorted((a, b) => a.bits - b.bits).map(solution => {
 					return <>
-						<h3 id={`solution-${solution.id}`} class='user-content'>{language && language.link ? <a href={language.link}>{language.name}</a> : solution.language}, {solution.bits / 8} bytes {solution.bits % 8 !== 0 && `(${solution.bits} bits)`}{language && language.encodingLink ? <a href={language.encodingLink}>*</a> : undefined}</h3>
+						<h3 id={`solution-${solution.id}`} class='user-content'>
+							{solution.language.link ? <a href={solution.language.link}>{solution.language.name}</a> : solution.language.name}
+							{solution.flags ? [' (', <code>{solution.flags}</code>, ')'] : undefined},
+							{solution.bits / 8} bytes {solution.bits % 8 !== 0 && `(${solution.bits} bits)`}{solution.language.encodingLink ? <a href={solution.language.encodingLink}>*</a> : undefined}
+						</h3>
 						<pre><code>{solution.improvements.at(-1)!.newCode}</code></pre>
 						<details>
 							<summary>Improve this solution!</summary>
@@ -68,8 +75,8 @@ export async function body(state: AppState, id: number) {
 							</form>
 						</details>
 					</>;
-				}))}
-			</>))}
+				})}
+			</>)}
 		</main>
 	</>;
 }

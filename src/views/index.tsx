@@ -45,6 +45,27 @@ export async function body(state: AppState) {
 					</li>)}
 				</ul>
 			</div>
+
+			<div>
+				<h2>Languages</h2>
+				<ul>
+					{(await client.language.findMany({ include: { solutions: true } })).toSorted((a, b) => b.solutions.length - a.solutions.length).map(lang => <li>
+						{lang.name}: {lang.solutions.length} solutions
+					</li>)}
+				</ul>
+				<details>
+					<summary>New language</summary>
+					<form method='POST' action='/language/new'>
+						<label for='name'>Name</label>
+						<input type='text' name='name' required />
+						<label for='link'>Link (optional)</label>
+						<input type='url' name='link' />
+						<label for='encodingLink'>Encoding link (optional)</label>
+						<input type='url' name='encodingLink' />
+						<button type='submit'>Create</button>
+					</form>
+				</details>
+			</div>
 		</main>
 	</>;
 }

@@ -57,7 +57,9 @@ model Solution {
   id              Int @id @default(autoincrement())
   approach        Approach @relation(fields: [approachId], references: [id], onDelete: Cascade)
   approachId      Int
-  language        String
+  language        Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  languageId      Int
+  flags           String?
   bits            Int
   improvements    Improvement[]
   createdAt       DateTime @default(now())
@@ -81,6 +83,7 @@ model Language {
   name            String @unique
   link            String?
   encodingLink    String?
+  solutions       Solution[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

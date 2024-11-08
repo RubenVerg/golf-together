@@ -1,5 +1,4 @@
 import { Router, Middleware, send } from '@oak/oak';
-import * as path from '@std/path';
 
 import apiRouter from './api.ts';
 import { HtmlPage, renderHtml } from '../lib/render_html.ts';
@@ -13,6 +12,7 @@ import newHole from '../controllers/new_hole.ts';
 import newApproach from '../controllers/new_approach.ts';
 import newSolution from '../controllers/new_solution.ts';
 import improveSolution from '../controllers/improve_solution.ts';
+import newLanguage from '../controllers/new_language.ts';
 
 const router = new Router();
 
@@ -25,6 +25,8 @@ const makeRenderMiddleware = <Args extends unknown[]>(page: HtmlPage<Args>, ...a
 }) as Middleware<AppState>;
 
 router.get('/', makeRenderMiddleware(await import('../views/index.tsx')));
+router
+	.post('/language/new', authenticated, newLanguage);
 router
 	.get('/hole/new', authenticated, makeRenderMiddleware(await import('../views/new_hole.tsx')))
 	.post('/hole/new', authenticated, newHole)
