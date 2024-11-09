@@ -24,6 +24,10 @@ const makeRenderMiddleware = <Args extends unknown[]>(page: HtmlPage<Args>, ...a
 	ctx.response.with(await renderHtml(ctx.state, page, ...args));
 }) as Middleware<AppState>;
 
+router.get('/favicon.ico', async ({ response }) => {
+	response.body = await Deno.readFile('./static/favicon.ico');
+});
+
 router.get('/', makeRenderMiddleware(await import('../views/index.tsx')));
 router
 	.post('/language/new', authenticated, newLanguage);

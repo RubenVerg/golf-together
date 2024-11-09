@@ -12,7 +12,10 @@ export interface TopBarProps {
 export default async function TopBar({ state }: TopBarProps) {
 	return <header style='height: 2rem; border-block-end: 1px solid black;'>
 		<span style='float: left;'>
-			<a href='/'>Golf Together</a>
+			<a href='/'>
+				<img src='/static/logo.svg' style='height: 1.75rem; vertical-align: middle;' />
+				<span style='vertical-align: middle;'>Golf Together</span>
+			</a>
 		</span>
 		<span style='float: right;'>{
 			state.user !== undefined ? <>
