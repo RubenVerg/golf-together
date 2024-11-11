@@ -1,0 +1,20 @@
+.message {
+	border: 1px solid black;
+	margin: 3px;
+}
+
+.message-timestamp {
+	float: right;
+	color: darkgray;
+	font-size: 0.8em;
+}
+
+.message-author::before {
+	content: 'by user with id ';
+	font-size: 0.8em;
+}
+
+.message-author {
+	color: grey;
+	font-size: 0.8em;
+}

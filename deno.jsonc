@@ -13,7 +13,7 @@
 		"@gz/jwt": "jsr:@gz/jwt@^0.1.0",
 		"@juji/simple-cookie": "jsr:@juji/simple-cookie@^2.0.8",
 		"@oak/oak": "jsr:@oak/oak@^17.1.0",
-		"@prisma/client": "npm:@prisma/client@^5.22.0",
+		"@prisma/client": "npm:@prisma/client@5.22.0",
 		"@std/cli": "jsr:@std/cli@^1.0.6",
 		"@std/dotenv": "jsr:@std/dotenv@^0.225.2",
 		"@std/encoding": "jsr:@std/encoding@^1.0.5",
@@ -21,7 +21,8 @@
 		"@ts-rex/bcrypt": "jsr:@ts-rex/bcrypt@^1.0.3",
 		"@types/node": "npm:@types/node@^22.7.6",
 		"htm": "https://deno.land/x/htm@0.2.3/mod.ts",
-		"prisma": "npm:prisma@5.22.0"
+		"prisma": "npm:prisma@5.22.0",
+		"type-fest": "npm:type-fest@^4.26.1"
 	},
 	"fmt": {
 		"singleQuote": true,

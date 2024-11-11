@@ -24,6 +24,7 @@ model User {
   holes           Hole[]
   approaches      Approach[]
   improvements    Improvement[]
+  messages        ChatMessage[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -36,6 +37,8 @@ model Hole {
   description     String
   edits           Int @default(0)
   approaches      Approach[]
+  room            ChatRoom? @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId          Int? @unique
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -84,6 +87,26 @@ model Language {
   link            String?
   encodingLink    String?
   solutions       Solution[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ChatRoom {
+  id              Int @id @default(autoincrement())
+  name            String
+  hole            Hole?
+  messages        ChatMessage[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ChatMessage {
+  id              Int @id @default(autoincrement())
+  room            ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId          Int
+  author          User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId        Int
+  text            String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

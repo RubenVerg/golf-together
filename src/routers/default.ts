@@ -1,6 +1,7 @@
 import { Router, Middleware, send } from '@oak/oak';
 
 import apiRouter from './api.ts';
+import websocketRouter from './websocket.ts';
 import { HtmlPage, renderHtml } from '../lib/render_html.ts';
 import { AppState } from '../types.d.ts';
 import loadAccount from '../middlewares/load_account.ts';
@@ -17,6 +18,7 @@ import newLanguage from '../controllers/new_language.ts';
 const router = new Router();
 
 router.use('/api', apiRouter.routes(), apiRouter.allowedMethods());
+router.use('/websocket', websocketRouter.routes(), websocketRouter.allowedMethods());
 
 router.use(loadAccount);
 
@@ -38,6 +40,7 @@ router
 	.post('/hole/:id/approach/:approachId/new', authenticated, newSolution)
 	.post('/hole/:id/solution/:solutionId/improve', authenticated, improveSolution);
 router.get('/hole/:id', async ({ state, params, response }) => response.with(await renderHtml(state, await import('../views/hole.tsx'), Number.parseInt(params.id))));
+router.get('/chat/:id', authenticated, async ({ state, params, response }) => response.with(await renderHtml(state, await import('../views/chatroom.tsx'), Number.parseInt(params.id))));
 router
 	.get('/login', makeRenderMiddleware(await import('../views/login.tsx')))
 	.post('/login', login)
