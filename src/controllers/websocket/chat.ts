@@ -32,14 +32,14 @@ export class ChatClient {
 	private readonly connectedPromise: Promise<void>;
 	
 	constructor(public readonly ws: WebSocket, public readonly user: User, public readonly room: ChatRoom) {
+		ws.onmessage = this.onMessage.bind(this);
+		ws.onclose = this.onClose.bind(this);
 		this.id = `${user.id}:${room.id}`;
 		ChatClient.connectedClients.set(this.id, this);
 		this.connectedPromise = new Promise<void>(resolve => {
 			if (ws.readyState == ws.OPEN) resolve();
 			else ws.addEventListener('open', () => resolve(), { once: true });
 		});
-		ws.onclose = this.onClose.bind(this);
-		ws.onmessage = this.onMessage.bind(this);
 	}
 
 	async shareOldMessages() {
