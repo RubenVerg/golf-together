@@ -23,41 +23,44 @@ type ReceivedMessage = MessageHasConnected | MessageSendMessage;
 export class ChatClient {
 	static readonly connectedClients = new Map<ClientId, ChatClient>();
 	
-	static broadcast(f: (client: ChatClient) => void) {
-		for (const client of ChatClient.connectedClients.values())
-			f(client);
-	}
-
-	static async broadcastAsync(f: (client: ChatClient) => Promise<void>) {
+	static async broadcast(f: (client: ChatClient) => Promise<void>) {
 		for (const client of ChatClient.connectedClients.values())
 			await f(client);
 	}
 
 	public readonly id: ClientId;
+	private readonly connectedPromise: Promise<void>;
 	
 	constructor(public readonly ws: WebSocket, public readonly user: User, public readonly room: ChatRoom) {
-		this.id = `${user.id}:${room.id}`
+		this.id = `${user.id}:${room.id}`;
 		ChatClient.connectedClients.set(this.id, this);
-		ws.onopen = this.whenConnected.bind(this);
+		this.connectedPromise = new Promise<void>(resolve => {
+			if (ws.readyState == ws.OPEN) resolve();
+			else ws.addEventListener('open', () => resolve(), { once: true });
+		});
 		ws.onclose = this.onClose.bind(this);
 		ws.onmessage = this.onMessage.bind(this);
 	}
 
 	async shareOldMessages() {
+		await this.connectedPromise;
 		const messages = await client.chatMessage.findMany({ where: { roomId: this.room.id }, orderBy: { createdAt: 'desc' }, take: 100 });
 		this.ws.send(JSON.stringify({ event: 'oldMessages', data: messages.map(m => ({ id: m.id, author: m.authorId, text: m.text, createdAt: m.createdAt.valueOf() })) } as MessageOldMessages));
 	}
 
-	shareConnectedUsers() {
+	async shareConnectedUsers() {
+		await this.connectedPromise;
 		this.ws.send(JSON.stringify({ event: 'connectedUsers', data: Object.fromEntries(ChatClient.connectedClients.values().map(({ user }) => [user.id, { id: user.id, username: user.username }])) } as MessageConnectedUsers));
 	}
 
-	shareMessage(message: ChatMessage) {
+	async shareMessage(message: ChatMessage) {
+		await this.connectedPromise;
 		this.ws.send(JSON.stringify({ event: 'receiveMessage', data: { id: message.id, author: message.authorId, text: message.text, createdAt: message.createdAt.valueOf() } } as MessageReceiveMessage));
 	}
 
 	async whenConnected() {
-		this.shareConnectedUsers();
+		await this.connectedPromise;
+		await this.shareConnectedUsers();
 		await this.shareOldMessages();
 	}
 
@@ -75,7 +78,7 @@ export class ChatClient {
 			}
 			case 'sendMessage': {
 				const message = await client.chatMessage.create({ data: { roomId: this.room.id, authorId: this.user.id, text: data } });
-				ChatClient.broadcast(c => c.shareMessage(message));
+				await ChatClient.broadcast(c => c.shareMessage(message));
 				break;
 			}
 			default: {
