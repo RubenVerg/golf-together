@@ -15,6 +15,8 @@ export async function body(state: AppState, id: number) {
 	return <>
 		{await TopBar({ state })}
 		<main>
+			<h1 id='loading'>Loading...</h1>
+
 			<h1 class='user-content'>{room.name}</h1>
 			<details>
 				<summary>New message</summary>

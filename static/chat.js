@@ -39,6 +39,8 @@ document.querySelector('#send-message').addEventListener('click', event => {
 	socket.send(JSON.stringify({ event: 'sendMessage', data: text }));
 });
 
-await new Promise(resolve => { setTimeout(() => resolve(), 250); });
+await new Promise(resolve => { setTimeout(() => resolve(), 1000); });
 
 socket.send(JSON.stringify({ event: 'hasConnected', data: null }));
+
+document.querySelector('#loading').remove();
