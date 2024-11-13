@@ -40,6 +40,12 @@ export class ChatClient {
 			if (ws.readyState == ws.OPEN) resolve();
 			else ws.addEventListener('open', () => resolve(), { once: true });
 		});
+		this.shareHasConnected();
+	}
+
+	async shareHasConnected() {
+		await this.connectedPromise;
+		this.ws.send(JSON.stringify({ event: 'hasConnected', data: null } as MessageHasConnected));
 	}
 
 	async shareOldMessages() {

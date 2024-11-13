@@ -8,6 +8,15 @@ await new Promise(resolve => {
 	socket.addEventListener('open', () => resolve(), { once: true });
 });
 
+await new Promise(resolve => {
+	socket.addEventListener('message', event => {
+		const message = JSON.parse(event.data);
+		if (message.event === 'hasConnected') {
+			resolve();
+		}
+	}, { once: true });
+});
+
 const showMessage = message => {
 	const messageTemplate = document.getElementById('message-template');
 	const messageElement = messageTemplate.content.cloneNode(true);
@@ -38,8 +47,6 @@ document.querySelector('#send-message').addEventListener('click', event => {
 	if (text.trim() === '') return;
 	socket.send(JSON.stringify({ event: 'sendMessage', data: text }));
 });
-
-await new Promise(resolve => { setTimeout(() => resolve(), 1000); });
 
 socket.send(JSON.stringify({ event: 'hasConnected', data: null }));
 
