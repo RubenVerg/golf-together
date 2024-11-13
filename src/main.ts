@@ -13,4 +13,4 @@ app.use(defaultRouter.allowedMethods());
 
 console.log(`Listening on port ${port}`);
 
-app.listen({ port });
+app.listen({ port, hostname: '[::]' });
