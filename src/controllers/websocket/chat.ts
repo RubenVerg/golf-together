@@ -4,7 +4,7 @@ import { JsonValue } from 'type-fest';
 import client, { ChatRoom, ChatMessage, User } from '../../lib/prisma.ts';
 import { AppState } from '../../types.d.ts';
 
-type ClientId = `${number}:${number}`;
+type ClientId = `${bigint}:${number}:${number}`;
 
 interface Message<N extends string, T extends JsonValue> {
 	event: N;
@@ -21,6 +21,8 @@ type MessageSendMessage = Message<'sendMessage', string>;
 type ReceivedMessage = MessageHasConnected | MessageSendMessage;
 
 export class ChatClient {
+	private static id = 0n;
+
 	static readonly connectedClients = new Map<ClientId, ChatClient>();
 	
 	static async broadcast(f: (client: ChatClient) => Promise<void>) {
@@ -34,7 +36,7 @@ export class ChatClient {
 	constructor(public readonly ws: WebSocket, public readonly user: User, public readonly room: ChatRoom) {
 		ws.onmessage = this.onMessage.bind(this);
 		ws.onclose = this.onClose.bind(this);
-		this.id = `${user.id}:${room.id}`;
+		this.id = `${ChatClient.id++}:${user.id}:${room.id}`;
 		ChatClient.connectedClients.set(this.id, this);
 		this.connectedPromise = new Promise<void>(resolve => {
 			if (ws.readyState == ws.OPEN) resolve();
