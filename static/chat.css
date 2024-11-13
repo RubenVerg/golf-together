@@ -9,11 +9,6 @@
 	font-size: 0.8em;
 }
 
-.message-author::before {
-	content: 'by user with id ';
-	font-size: 0.8em;
-}
-
 .message-author {
 	color: grey;
 	font-size: 0.8em;

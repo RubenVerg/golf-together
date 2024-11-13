@@ -21,9 +21,10 @@ const showMessage = message => {
 	const messageTemplate = document.getElementById('message-template');
 	const messageElement = messageTemplate.content.cloneNode(true);
 
+	messageElement.querySelector('.message').id = `message-${message.id}`;
 	messageElement.querySelector('.message-content').textContent = message.text;
-	messageElement.querySelector('.message-timestamp').textContent = new Intl.DateTimeFormat('en-GB').format(new Date(message.createdAt));
-	messageElement.querySelector('.message-author').textContent = message.author;
+	messageElement.querySelector('.message-timestamp').textContent = new Intl.DateTimeFormat('ja-JP', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(message.createdAt));
+	messageElement.querySelector('.message-author').textContent = message.authorName;
 
 	document.querySelector('#messages').appendChild(messageElement);
 }
@@ -36,6 +37,14 @@ socket.onmessage = event => {
 		}
 	} else if (message.event === 'receiveMessage') {
 		showMessage(message.data);
+	} else if (message.event === 'connectedUsers') {
+		const connectedUsers = document.querySelector('#connected-users');
+		connectedUsers.innerHTML = '';
+		for (const user of Object.values(message.data)) {
+			const userElement = document.createElement('li');
+			userElement.textContent = user.username;
+			connectedUsers.appendChild(userElement);
+		}
 	} else {
 		console.log(message);
 	}

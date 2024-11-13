@@ -19,6 +19,10 @@ export async function body(state: AppState, id: number) {
 
 			<h1 class='user-content'>{room.name}</h1>
 			<details>
+				<summary>Connected users</summary>
+				<ul id='connected-users'></ul>
+			</details>
+			<details>
 				<summary>New message</summary>
 				<form>
 					<label for='text'>Text</label>

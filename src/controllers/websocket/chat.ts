@@ -12,8 +12,8 @@ interface Message<N extends string, T extends JsonValue> {
 }
 
 type MessageConnectedUsers = Message<'connectedUsers', Record<number, { id: number, username: string }>>;
-type MessageOldMessages = Message<'oldMessages', { id: number, author: number, text: string, createdAt: number }[]>;
-type MessageReceiveMessage = Message<'receiveMessage', { id: number, author: number, text: string, createdAt: number }>;
+type MessageOldMessages = Message<'oldMessages', { id: number, author: number, authorName: string, text: string, createdAt: number }[]>;
+type MessageReceiveMessage = Message<'receiveMessage', { id: number, author: number, authorName: string, text: string, createdAt: number }>;
 
 type MessageHasConnected = Message<'hasConnected', null>;
 type MessageSendMessage = Message<'sendMessage', string>;
@@ -50,8 +50,8 @@ export class ChatClient {
 
 	async shareOldMessages() {
 		await this.connectedPromise;
-		const messages = await client.chatMessage.findMany({ where: { roomId: this.room.id }, orderBy: { createdAt: 'desc' }, take: 100 });
-		this.ws.send(JSON.stringify({ event: 'oldMessages', data: messages.map(m => ({ id: m.id, author: m.authorId, text: m.text, createdAt: m.createdAt.valueOf() })) } as MessageOldMessages));
+		const messages = await client.chatMessage.findMany({ where: { roomId: this.room.id }, orderBy: { createdAt: 'desc' }, take: 100, include: { author: true } });
+		this.ws.send(JSON.stringify({ event: 'oldMessages', data: messages.map(m => ({ id: m.id, author: m.authorId, authorName: m.author.username, text: m.text, createdAt: m.createdAt.valueOf() })) } as MessageOldMessages));
 	}
 
 	async shareConnectedUsers() {
@@ -59,9 +59,9 @@ export class ChatClient {
 		this.ws.send(JSON.stringify({ event: 'connectedUsers', data: Object.fromEntries(ChatClient.connectedClients.values().map(({ user }) => [user.id, { id: user.id, username: user.username }])) } as MessageConnectedUsers));
 	}
 
-	async shareMessage(message: ChatMessage) {
+	async shareMessage(message: ChatMessage & { author: User }) {
 		await this.connectedPromise;
-		this.ws.send(JSON.stringify({ event: 'receiveMessage', data: { id: message.id, author: message.authorId, text: message.text, createdAt: message.createdAt.valueOf() } } as MessageReceiveMessage));
+		this.ws.send(JSON.stringify({ event: 'receiveMessage', data: { id: message.id, author: message.authorId, authorName: message.author.username, text: message.text, createdAt: message.createdAt.valueOf() } } as MessageReceiveMessage));
 	}
 
 	async whenConnected() {
@@ -83,7 +83,7 @@ export class ChatClient {
 				break;
 			}
 			case 'sendMessage': {
-				const message = await client.chatMessage.create({ data: { roomId: this.room.id, authorId: this.user.id, text: data } });
+				const message = await client.chatMessage.create({ data: { roomId: this.room.id, authorId: this.user.id, text: data }, include: { author: true } });
 				await ChatClient.broadcast(c => c.shareMessage(message));
 				break;
 			}
