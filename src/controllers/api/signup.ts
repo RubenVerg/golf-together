@@ -11,7 +11,7 @@ export default (async function signup({ request, response }) {
 		response.body = { message: 'Invalid username' };
 		return;
 	}
-	if (username.length < 6 || username.length > 32) {
+	if (username.length < 5 || username.length > 32) {
 		response.status = 400;
 		response.body = { message: 'Invalid username length' };
 		return;
